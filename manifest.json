@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+  "name": "TIFF viewer",
+  "description": "Intercepts any resource requests that end in .tif or .tiff and converts them into data urls using an emscripten port of libtiff.",
+  "version": "1.0",
+  "background": {
+    "scripts": [
+      "tiff.min.js",
+      "background.js"
+    ]
+  },
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "tabs",
+    "<all_urls>"
+  ],
+  "icons": {
+    "128": "icon.png"
+  }
+}
