@@ -18,10 +18,12 @@ function convert_binary_string_to_buffer( data ){
 function create_request_for_url( url ){
   var request;
 
+  console.log( 'Starting XHR request for', url );
   request = new XMLHttpRequest();
   request.open( 'GET', url, false );
   request.overrideMimeType( 'text\/plain; charset=x-user-defined' );
   request.send( null );
+  console.log( 'Finished XHR request' );
 
   return request;
 };
@@ -31,7 +33,10 @@ function get_buffer_from_url( url ){
 
   request = create_request_for_url( url );
   
-  if( request.status != 200 ){ return url; };
+  if( request.status != 200 ){
+    console.log( 'Exception', 'request for image failed', request );
+    return url;
+  };
 
   return convert_binary_string_to_buffer( request.responseText );
 };
@@ -40,10 +45,11 @@ convert_buffer_to_dataurl = function( buffer ){
   var tiff;
 
   try {
+    console.log( 'Opening tiff' );
     tiff = new Tiff({ buffer: buffer });
-    // console.log( 'Opened', 'width: ', tiff.width(), 'height: ', tiff.height(), tiff );
+    console.log( 'Opened', 'width: ', tiff.width(), 'height: ', tiff.height(), tiff );
   } catch( e ){
-    // console.log( 'Exception', e );
+    console.log( 'Exception', e );
     return;
   }
 
@@ -53,13 +59,13 @@ convert_buffer_to_dataurl = function( buffer ){
 function redirect_request_to_dataurl( details ){
   var url, buffer, dataURI;
 
-  // console.log( 'Entering', details );
+  console.log( 'Entering', details );
   url = details.url;
-  // console.log( 'Loading', details.url );
+  console.log( 'Loading', details.url );
   buffer = get_buffer_from_url( url );
-  // console.log( 'Loaded', buffer.byteLength, 'bytes of data' );
+  console.log( 'Loaded', buffer.byteLength, 'bytes of data' );
   dataURI = convert_buffer_to_dataurl( buffer );
-  // console.log( 'Converted', dataURI );
+  console.log( 'Converted', dataURI );
 
   return { redirectUrl: dataURI };
 };
@@ -86,7 +92,6 @@ function content_type_header_is_tiff( headers ){
 function redirect_request_to_dataurl_if_response_content_type_is_tiff( details ){
   if( !content_type_header_is_tiff( details.responseHeaders ) ){ return; }
 
-  console.log( 'Its a tiff!' );
   details.responseHeaders.push({ name: 'Content-Type', value: 'image/png' })
 
   response = redirect_request_to_dataurl( details );
