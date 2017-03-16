@@ -22,9 +22,11 @@ I'm using Seikichis port of libtiff, [seikichi/tiff.js](https://github.com/seiki
 #Plans
 It would be nice to have a real Javascript decoder for tiffs, instead of the LLVM port. G.P. Hemsley has that going over at Github as well, [GPHemsley/tiff-js](https://github.com/GPHemsley/tiff-js), so I might get into that if I have some time over (so probably not tbh).
 
-A settings panel for things like switching debug output on and changing the memory limit would be nice.
+A settings panel for things like switching debug output would be nice. 
 
-Another approach for intercepting the image and decoding would also be nice sice it has to be syncronous now and that means I can't use the nice XHR bytearray return type but had to hack my own convertion that eats time as well...
+Replace images with a blob instead of data:image
+
+Another approach for intercepting the image and decoding would also be nice since it has to be syncronous now and that means I can't use the nice XHR bytearray return type but had to hack my own convertion that eats time as well...
 
 #Thanks
 To Seikichi for his port of libtiff. That saved me some serious time and effort.
