@@ -1,9 +1,16 @@
+"use strict";
+// Defaults
+var DecoderMemoryLimitInMegabytes = 32;
+var DebugOutput = false;
+
 // Saves options to chrome.storage.sync.
 function save_options() {
-  var MB = document.getElementById('MB').value;
+  var SaveDecoderMemoryLimitInMegabytes = parseInt(document.getElementById('DecoderMemoryLimitInMegabytes').value);
+  var SaveDebugOutput = document.getElementById('DebugOutput').checked;
   
   chrome.storage.local.set({
-    MB: MB
+    DecoderMemoryLimitInMegabytes: SaveDecoderMemoryLimitInMegabytes,
+    DebugOutput: SaveDebugOutput
   }, function() {
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
@@ -16,22 +23,27 @@ function save_options() {
 
 // Restores option state using the preferences stored in chrome.storage.
 function restore_options() {
-    chrome.storage.local.get('MB', function(items) {
-        var MB;
-        if(items.MB !== undefined) {
-            MB = items.MB;
+    chrome.storage.local.get(['DecoderMemoryLimitInMegabytes', 'DebugOutput'], function(items) {
+    console.log(items.DecoderMemoryLimitInMegabytes);
+        if(items.DecoderMemoryLimitInMegabytes !== undefined) {
+            document.getElementById('DecoderMemoryLimitInMegabytes').value = items.DecoderMemoryLimitInMegabytes;
         } else {
-            MB = "32";
+            document.getElementById('DecoderMemoryLimitInMegabytes').value = DecoderMemoryLimitInMegabytes;
         }
-        console.log(MB);
-        document.getElementById('MB').value = MB;
+        
+        if(items.DebugOutput !== undefined) {
+            document.getElementById('DebugOutput').checked = items.DebugOutput;
+        } else {
+            document.getElementById('DebugOutput').checked = DebugOutput;
+        }
     });
 }
-// Restores select box and checkbox state using the preferences
-// stored in chrome.storage.
+// Reset select box and checkbox state using the default 
+// add-on values.
 function reset_options() {
-  // Use default value makeActive = true and displayBOM = true.
-    document.getElementById('MB').value = "32";
+    document.getElementById('DecoderMemoryLimitInMegabytes').value = DecoderMemoryLimitInMegabytes;
+    document.getElementById('DebugOutput').checked = DebugOutput;
+    
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
     status.textContent = 'Options reset, need to save.';

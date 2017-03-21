@@ -6,13 +6,28 @@
 
 <body>
   <label>
-    <input type="number" placeholder="32" id="MB">
-    Maximum available decoding memory in Megabytes (MB)
+    <select id="DecoderMemoryLimitInMegabytes">
+      <option value=2>2 MB</option>
+      <option value=4>4 MB</option>
+      <option value=8>8 MB</option>
+      <option value=16>16 MB</option>
+      <option value=32>32 MB</option>
+      <option value=64>64 MB</option>
+      <option value=128>128 MB</option>
+      <option value=256>256 MB</option>
+    </select>
+    Maximum available decoding memory in Megabytes
+  </label>
+  <label>
+    <BR>
+    <!-- Must restart due to loading of background.js only once -->
+    <input type="checkbox" id="DebugOutput" title="Browser must be restarted for this to take effect.">
+    Show console debug messages.
   </label>
   <BR><BR>
   <div id="status"></div>
-  <button id="save">Save</button>
-  <button id="reset">Reset</button>
+  <button id="save" title="Save">Save</button>
+  <button id="reset" title="Restore default TIFF viewer options">Default</button>
   <script src="options.js"></script>
 </body>
 </html>
