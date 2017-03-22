@@ -1,52 +1,57 @@
 "use strict";
-// Defaults
-var DecoderMemoryLimitInMegabytes = 32;
-var DebugOutput = false;
+const DecoderMemoryLimitInMegabytesDefault = 32;
+const ShowDebugOutputDefault = false;
 
-// Saves options to chrome.storage.sync.
+// Saves options to chrome.storage.local.
 function save_options() {
-  var SaveDecoderMemoryLimitInMegabytes = parseInt(document.getElementById('DecoderMemoryLimitInMegabytes').value);
-  var SaveDebugOutput = document.getElementById('DebugOutput').checked;
+    var SaveDecoderMemoryLimitInMegabytes = parseInt(document.getElementById('DecoderMemoryLimitInMegabytes').value);
+    var SaveDebugOutput = document.getElementById('ShowDebugOutput').checked;
   
-  chrome.storage.local.set({
-    DecoderMemoryLimitInMegabytes: SaveDecoderMemoryLimitInMegabytes,
-    DebugOutput: SaveDebugOutput
-  }, function() {
-    // Update status to let user know options were saved.
-    var status = document.getElementById('status');
-    status.textContent = 'Options saved.';
-    setTimeout(function() {
-      status.textContent = '';
-    }, 1050);
-  });
+  // Before saving verify if SaveDebugOutput was updated
+    chrome.storage.local.get('ShowDebugOutput', function(options) {
+        var CheckShowDebugOutput = options.ShowDebugOutput;
+        chrome.storage.local.set({
+          DecoderMemoryLimitInMegabytes: SaveDecoderMemoryLimitInMegabytes,
+          ShowDebugOutput: SaveDebugOutput
+        }, function() {
+          // Update status to let user know options were saved.
+          var status = document.getElementById('status');
+          status.textContent = 'Options saved.';
+          setTimeout(function() {
+            status.textContent = '';
+          }, 1050);
+        });
+        if(CheckShowDebugOutput !== undefined && CheckShowDebugOutput !== SaveDebugOutput) {
+            chrome.runtime.reload();
+        }
+    });
 }
 
 // Restores option state using the preferences stored in chrome.storage.
 function restore_options() {
-    chrome.storage.local.get(['DecoderMemoryLimitInMegabytes', 'DebugOutput'], function(items) {
-    console.log(items.DecoderMemoryLimitInMegabytes);
-        if(items.DecoderMemoryLimitInMegabytes !== undefined) {
-            document.getElementById('DecoderMemoryLimitInMegabytes').value = items.DecoderMemoryLimitInMegabytes;
+    chrome.storage.local.get(['DecoderMemoryLimitInMegabytes', 'ShowDebugOutput'], function(options) {
+        if(options.DecoderMemoryLimitInMegabytes !== undefined) {
+            document.getElementById('DecoderMemoryLimitInMegabytes').value = options.DecoderMemoryLimitInMegabytes;
         } else {
-            document.getElementById('DecoderMemoryLimitInMegabytes').value = DecoderMemoryLimitInMegabytes;
+            document.getElementById('DecoderMemoryLimitInMegabytes').value = DecoderMemoryLimitInMegabytesDefault;
         }
         
-        if(items.DebugOutput !== undefined) {
-            document.getElementById('DebugOutput').checked = items.DebugOutput;
+        if(options.ShowDebugOutput !== undefined) {
+            document.getElementById('ShowDebugOutput').checked = options.ShowDebugOutput;
         } else {
-            document.getElementById('DebugOutput').checked = DebugOutput;
+            document.getElementById('ShowDebugOutput').checked = ShowDebugOutputDefault;
         }
     });
 }
 // Reset select box and checkbox state using the default 
 // add-on values.
 function reset_options() {
-    document.getElementById('DecoderMemoryLimitInMegabytes').value = DecoderMemoryLimitInMegabytes;
-    document.getElementById('DebugOutput').checked = DebugOutput;
+    document.getElementById('DecoderMemoryLimitInMegabytes').value = DecoderMemoryLimitInMegabytesDefault;
+    document.getElementById('ShowDebugOutput').checked = ShowDebugOutputDefault;
     
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
-    status.textContent = 'Options reset, need to save.';
+    status.textContent = 'Options restored, need to save.';
     setTimeout(function() {
       status.textContent = '';
     }, 1550);
@@ -54,7 +59,3 @@ function reset_options() {
 document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('save').addEventListener('click', save_options);
 document.getElementById('reset').addEventListener('click', reset_options);
-
-
-// Saves options to chrome.storage.sync.
-

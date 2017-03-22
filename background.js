@@ -1,17 +1,15 @@
-chrome.storage.local.get(['DecoderMemoryLimitInMegabytes','DebugOutput'], function (obj) {
+chrome.storage.local.get(['DecoderMemoryLimitInMegabytes','ShowDebugOutput'], function (options) {
     var DecoderMemoryLimitInbytes;
-    if (obj.DecoderMemoryLimitInMegabytes === undefined) {
+    if (options.DecoderMemoryLimitInMegabytes === undefined) {
         DecoderMemoryLimitInbytes = 32*1E6;
     } else {
-        DecoderMemoryLimitInbytes = obj.DecoderMemoryLimitInMegabytes*1E6 ;
+        DecoderMemoryLimitInbytes = options.DecoderMemoryLimitInMegabytes*1E6 ;
     }
     Tiff.initialize({ TOTAL_MEMORY: DecoderMemoryLimitInbytes });
 
-    // Disable console.log if DebugOutput is false
-    if (obj.DebugOutput === undefined) {
+    // Disable console.log if ShowDebugOutput is false
+    if (options.ShowDebugOutput !== true) {
         console.log = function() {};
-    } else {
-        if(obj.DebugOutput === false) console.log = function() {};
     }
     
     function convert_binary_string_to_buffer( data ){
