@@ -1,7 +1,7 @@
-# Chrome Tiff viewer
-A Chrome extension that enables tiff images, inline in your browser. As if they were supported for real.
+# Tiff viewer extension
+A Chrome/Firefox extension that enables TIFF images inline in your browser, as if they were supported for real!
 
-The extension works by intercepting any attempt by the browser to load a URL that ends in .tiff (or variants) and handling that request instead. The handling consists of using a Javascript, LLVM/Emscripten, port of libtiff to render the tiff image onto an in memory canvas. The canvas has a method for getting its content as a `data:image` URL and that is used to get a redirect URL for the original browser request.
+The extension works by intercepting any attempt by the browser to load a URL that ends in .tiff (or variants) and handling that request instead. The handling consists of using a Javascript, LLVM/Emscripten, port of libtiff to render the TIFF image onto an in memory canvas. The canvas has a method for getting its content as a `data:image` URL and that is used to get a redirect URL for the original browser request.
 
 So:
 
@@ -10,7 +10,7 @@ So:
  3. Render received image data into a canvas
  4. Get `data:image` URI from canvas and redirect to it
 
-The effect is that the tiff images appear on page as if the browser had native support for tiff images. There is a small delay though, due to the fact that we have to download and decode the image separately. But it's small enough that you won't notice it unless you look for it.
+The effect is that the TIFF images appear on page as if the browser had native support for TIFF images. There is a small delay though, due to the fact that we have to download and decode the image separately. But it's small enough that you won't notice it unless you look for it.
 
 # Known limitations
 The extension has a few limitations that might be worth knowing about. If you find an image it cant decode or if it decodes it incorrectly etc open an issue, include the URL to the image and I'll have a look.
