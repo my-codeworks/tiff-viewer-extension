@@ -4,7 +4,7 @@ A Chrome/Firefox extension that enables TIFF images inline in your browser, as i
 ## Download
 Chrome: https://chrome.google.com/webstore/detail/tiff-viewer/fciggfkkblggmebjbekbebbcffeacknj
 
-Firefox: https://addons.mozilla.org/en-US/firefox/addon/tiff-viewer/
+Firefox: https://addons.mozilla.org/firefox/addon/tiff-viewer/
 
 ## What does it do?
 The extension works by intercepting any attempt by the browser to load a URL that ends in .tiff (or variants) and handling that request instead. The handling consists of using a Javascript, LLVM/Emscripten, port of libtiff to render the TIFF image onto an in memory canvas. The canvas has a method for getting its content as a `data:image` URL and that is used to get a redirect URL for the original browser request.
